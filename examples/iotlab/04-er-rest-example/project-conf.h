@@ -40,13 +40,40 @@
 #define __PROJECT_ERBIUM_CONF_H__
 
 /* Custom channel and PAN ID configuration for your project. */
-/*
-   #undef RF_CHANNEL
-   #define RF_CHANNEL                     26
+#undef RF2XX_CHANNEL
+#define RF2XX_CHANNEL                   11
 
-   #undef IEEE802154_CONF_PANID
-   #define IEEE802154_CONF_PANID          0xABCD
+/* Configure Radio Transmission power
+ *   - min     = m17dBm (-17dBm)
+ *   - default = 0dBm 
+ *   - max     = 3dBm
+ * To see all the valid values see `convert_power` function in
+ *     openlab/net/phy_rf2xx/phy_rf2xx.c
  */
+#undef RF2XX_TX_POWER
+#define RF2XX_TX_POWER  PHY_POWER_m7dBm
+
+/* Configure Radio Transmission power
+ *   - min     = m101Bm (-101dBm)
+ *   - default = m101dBm 
+ *   - max     = m48dBm (-48dBm)
+ * To see all the valid values see `enum rf2xx_phy_rx_threshold` in
+ *     openlab/periph/rf2xx/rf2xx_regs.h
+ */
+#undef RF2XX_RX_RSSI_THRESHOLD
+#define RF2XX_RX_RSSI_THRESHOLD  RF2XX_PHY_RX_THRESHOLD__m60dBm
+
+
+#undef IEEE802154_CONF_PANID
+#define IEEE802154_CONF_PANID          0xc0c0
+
+#undef NBR_TABLE_CONF_MAX_NEIGHBORS
+#define NBR_TABLE_CONF_MAX_NEIGHBORS 64
+#undef UIP_CONF_MAX_ROUTES
+#define UIP_CONF_MAX_ROUTES 64
+
+//#undef NETSTACK_CONF_RDC
+//#define NETSTACK_CONF_RDC nullrdc_driver
 
 /* IP buffer size must match all other hops, in particular the border router. */
 /*
