@@ -57,7 +57,8 @@
 #endif
 
 /* FIXME: This server address is hard-coded for Cooja and link-local for unconnected border router. */
-#define SERVER_NODE(ipaddr)   uip_ip6addr(ipaddr, 0xfe80, 0, 0, 0, 0x0212, 0x7402, 0x0002, 0x0202)      /* cooja2 */
+//#define SERVER_NODE(ipaddr)   uip_ip6addr(ipaddr, 0xfe80, 0, 0, 0, 0x0212, 0x7402, 0x0002, 0x0202)      /* cooja2 */
+#define SERVER_NODE(ipaddr)   uip_ip6addr(ipaddr, 0x2001, 0x0660, 0x4701, 0xf087, 0, 0, 0, 0xb384)      /* 2001:660:4701:f087::b384 */
 /* #define SERVER_NODE(ipaddr)   uip_ip6addr(ipaddr, 0xbbbb, 0, 0, 0, 0, 0, 0, 0x1) */
 
 #define LOCAL_PORT      UIP_HTONS(COAP_DEFAULT_PORT + 1)
@@ -72,10 +73,13 @@ uip_ipaddr_t server_ipaddr;
 static struct etimer et;
 
 /* Example URIs that can be queried. */
-#define NUMBER_OF_URLS 4
+//#define NUMBER_OF_URLS 4
+#define NUMBER_OF_URLS 3
 /* leading and ending slashes only for demo purposes, get cropped automatically when setting the Uri-Path */
 char *service_urls[NUMBER_OF_URLS] =
-{ ".well-known/core", "/actuators/toggle", "battery/", "error/in//path" };
+//{ ".well-known/core", "/actuators/toggle", "/test/hello", "error/in//path" };
+{ ".well-known/core", "/test/hello", "error/in//path" };
+static int uri_switch = 0;
 #if PLATFORM_HAS_BUTTON
 static int uri_switch = 0;
 #endif
@@ -112,13 +116,15 @@ PROCESS_THREAD(er_example_client, ev, data)
     PROCESS_YIELD();
 
     if(etimer_expired(&et)) {
-      printf("--Toggle timer--\n");
+      //printf("--Toggle timer--\n");
 
       /* prepare request, TID is set by COAP_BLOCKING_REQUEST() */
+      /*
       coap_init_message(request, COAP_TYPE_CON, COAP_POST, 0);
       coap_set_header_uri_path(request, service_urls[1]);
-
+      
       const char msg[] = "Toggle!";
+
 
       coap_set_payload(request, (uint8_t *)msg, sizeof(msg) - 1);
 
@@ -129,6 +135,21 @@ PROCESS_THREAD(er_example_client, ev, data)
                             client_chunk_handler);
 
       printf("\n--Done--\n");
+      */
+
+      coap_init_message(request, COAP_TYPE_CON, COAP_GET, 0);
+      coap_set_header_uri_path(request, service_urls[uri_switch]);
+
+      printf("--Requesting %s--\n", service_urls[uri_switch]);
+
+      PRINT6ADDR(&server_ipaddr);
+      PRINTF(" : %u\n", UIP_HTONS(REMOTE_PORT));
+
+      COAP_BLOCKING_REQUEST(&server_ipaddr, REMOTE_PORT, request,
+                            client_chunk_handler);
+
+      printf("\n--Done--\n");
+      uri_switch = (uri_switch + 1) % NUMBER_OF_URLS;
 
       etimer_reset(&et);
 
