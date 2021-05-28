@@ -31,6 +31,39 @@
 #ifndef PROJECT_ROUTER_CONF_H_
 #define PROJECT_ROUTER_CONF_H_
 
+#define RF2XX_CHANNEL 11
+#define IEEE802154_CONF_PANID 0xc0c0
+
+/* Configure Radio Transmission power
+ *   - min     = m17dBm (-17dBm)
+ *   - default = 0dBm 
+ *   - max     = 3dBm
+ * To see all the valid values see `convert_power` function in
+ *     openlab/net/phy_rf2xx/phy_rf2xx.c
+ */
+#undef RF2XX_TX_POWER
+#define RF2XX_TX_POWER  PHY_POWER_m7dBm
+
+/* Configure Radio Transmission power
+ *   - min     = m101Bm (-101dBm)
+ *   - default = m101dBm 
+ *   - max     = m48dBm (-48dBm)
+ * To see all the valid values see `enum rf2xx_phy_rx_threshold` in
+ *     openlab/periph/rf2xx/rf2xx_regs.h
+ */
+#undef RF2XX_RX_RSSI_THRESHOLD
+#define RF2XX_RX_RSSI_THRESHOLD  RF2XX_PHY_RX_THRESHOLD__m60dBm
+
+//#undef NETSTACK_CONF_RDC
+//#define NETSTACK_CONF_RDC nullrdc_driver
+
+
+#undef NBR_TABLE_CONF_MAX_NEIGHBORS
+#define NBR_TABLE_CONF_MAX_NEIGHBORS 64
+#undef UIP_CONF_MAX_ROUTES
+#define UIP_CONF_MAX_ROUTES 64
+
+
 #ifndef WITH_NON_STORING
 #define WITH_NON_STORING 0 /* Set this to run with non-storing mode */
 #endif /* WITH_NON_STORING */
