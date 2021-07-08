@@ -116,6 +116,13 @@ int main()
 
     platform_init();
 
+    log_printf("NETSTACK_MAC: %s\n",
+            	NETSTACK_MAC.name);
+    log_printf("NETSTACK_RDC: %s\n",
+            	NETSTACK_RDC.name);
+    log_printf("RF2XX_CHANNEL: %d\n",
+            	RF2XX_CHANNEL);
+
     /*
      * Contiki core
      *
