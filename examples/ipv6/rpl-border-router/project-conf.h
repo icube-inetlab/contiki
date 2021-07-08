@@ -35,6 +35,15 @@
 #define WITH_NON_STORING 0 /* Set this to run with non-storing mode */
 #endif /* WITH_NON_STORING */
 
+#undef RF2XX_CHANNEL
+#define RF2XX_CHANNEL 11
+
+#undef  IEEE802154_CONF_PANID
+#define IEEE802154_CONF_PANID 0xBABA
+
+#undef  NETSTACK_CONF_RDC
+#define NETSTACK_CONF_RDC nullrdc_driver
+
 #if WITH_NON_STORING
 #undef RPL_NS_CONF_LINK_NUM
 #define RPL_NS_CONF_LINK_NUM 40 /* Number of links maintained at the root */
