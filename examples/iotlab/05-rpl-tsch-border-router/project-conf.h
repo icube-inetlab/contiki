@@ -70,6 +70,9 @@
 #include "../00-configuration/tsch-project-conf.h"
 #include "../00-configuration/iotlab-project-conf.h"
 
+#undef IEEE802154_CONF_PANID
+#define IEEE802154_CONF_PANID 0xBABA
+
 /* Do not start TSCH at init, wait for NETSTACK_MAC.on() */
 #undef TSCH_CONF_AUTOSTART
 #define TSCH_CONF_AUTOSTART 0
